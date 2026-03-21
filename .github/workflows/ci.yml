@@ -1,0 +1,15 @@
+name: Running the CI for testing the hello world     
+on: 
+  push:
+    branches:
+      - ci-branch
+  pull_request:
+    branches:
+      - ci-branch
+jobs:
+  build:
+    runs-on: ubuntu-latest #this the temp container like pod git hub action will create to run the ci
+    steps:
+      - name: Hello world echo 
+        run: echo "Hello, world! from ci-branch for testing the ci"
+
