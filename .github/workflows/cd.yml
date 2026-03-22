@@ -1,0 +1,33 @@
+       name: "CD to deploy artifact created on ci.yml file and place is same server /opt"
+on:
+  workflow_run:
+    workflows: ["CI - DevOps AI Tool"]
+    types:
+      - completed
+jobs:
+  deploy:
+    name: Deploying the nodejs application to ec2 instance as runner in aws ap-south-1
+    runs-on: self-hosted
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Update the packages
+        run: sudo apt update -y
+
+      - name: Install nodejs and npm
+        run: sudo apt install nodejs npm -y
+
+      - name: Download the artifacts from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: app-artifact
+          path: ./app-artifact
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: List downloaded files
+        run: ls ./app-artifact
+
+      - name: Deployment completed
+        run: echo "Deployment completed successfully"
+
+
