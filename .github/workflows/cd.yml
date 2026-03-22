@@ -1,4 +1,4 @@
-       name: "CD to deploy artifact created on ci.yml file and place is same server /opt"
+name: "CD to deploy artifact created on ci.yml file and place is same server /opt"
 on:
   workflow_run:
     workflows: ["CI - DevOps AI Tool"]
