@@ -1,15 +1,40 @@
-name: Running the CI for testing the hello world     
-on: 
+name: CI - DevOps AI Tool Hello
+
+on:
   push:
     branches:
+      #- main
       - ci-branch
   pull_request:
     branches:
+      #- main
       - ci-branch
-jobs:
-  build:
-    runs-on: ubuntu-latest #this the temp container like pod git hub action will create to run the ci
-    steps:
-      - name: Hello world echo 
-        run: echo "Hello, world! from ci-branch for testing the ci"
 
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+#   docker:
+#     runs-on: ubuntu-latest
+#     needs: test
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Build Docker image
+#         run: docker build -t devops-ai-tool:${{ github.sha }} .
