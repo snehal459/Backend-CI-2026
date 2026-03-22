@@ -1,8 +1,13 @@
-name: CI - DevOps AI Tool Hello
+name: CI - DevOps AI Tool
 
 on:
   push:
     branches:
+      #- main
+      - ci-branch
+  pull_request:
+    branches:
+      #- main
       - ci-branch
 
 jobs:
@@ -15,11 +20,29 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'   # ✅ keep this
-          # cache removed ❌
+          node-version: '18'
 
       - name: Install dependencies
-        run: npm install   # ✅ works without lock file
+        run: npm install
 
       - name: Run tests
-        run: echo "No tests yet"
+        run: npm test
+
+      - name: Build application
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-artifact
+          path: dist/
+
+#   docker:
+#     runs-on: ubuntu-latest
+#     needs: test
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Build Docker image
+#         run: docker build -t devops-ai-tool:${{ github.sha }} .
